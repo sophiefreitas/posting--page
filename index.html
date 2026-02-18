@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crie seu post</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>Crie seu post</h1>
+    <form id="formulario">
+        <input id="input-titulo" placeholder="Digite o título..." required>
+        <textarea style="resize: none" id="textarea-titulo" required>
+        </textarea>
+        <button id="botao" type="submit">Postar</button>
+    </form>
+    <h2 id="titulo">O título aparecerá aqui</h2>
+    <p id="conteudo">O conteúdo aparecerá aqui</p>
+</body>
+
+</html>
+
+<!--JS-->
+
+<script>
+    const formulario = document.querySelector("#formulario");
+    const input = document.querySelector("#input-titulo")
+    const textarea = document.querySelector("#textarea-titulo")
+    const botao = document.querySelector("#botao")
+    const titulo = document.querySelector("#titulo")
+    const conteudo = document.querySelector("#conteudo")
+
+    formulario.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const data = {
+            title: input.value,
+            body: textarea.value,
+            userId: 1
+        };
+
+        fetch('https://jsonplaceholder.typicode.com/posts', {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
+            .then(response => response.json())
+            .then(dadosRetornados => {
+
+                titulo.innerHTML = dadosRetornados.title;
+                conteudo.innerHTML = dadosRetornados.body;
+
+                formulario.reset();
+                alert("Post enviado com sucesso!");
+            })
+            .catch(error => console.error("Erro na requisição:", error));
+    });
+</script>
+
+<!--CSS-->
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    :root {
+        --cinza: #f7f7f7;
+        --bebe: #dfe3ee;
+        --azul: #8b9dc3;
+        --azul-es: #3b5998;
+    }
+
+    body {
+        font-family: system-ui;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        background-color: var(--cinza);
+    }
+
+    main {
+        margin: 0 auto;
+    }
+
+    h1 {
+        color: var(--azul-es)
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 12px
+    }
+
+    input,
+    textarea {
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px
+    }
+
+    button {
+        background-color: var(--azul-es);
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #8b9dc3;
+    }
+
+    #titulo {
+    margin-top: 0; 
+    color: #1c1e21;
+    
+    }
+
+    #conteudo { 
+    line-height: 1.5; 
+    color: #4b4f56; 
+    }
